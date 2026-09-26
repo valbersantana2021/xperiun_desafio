@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "27183ffb5c7c1fd1938f",
   "position": {
     "x": 766,
@@ -28,24 +28,6 @@
               "queryRef": "dGeografia.Estado",
               "nativeQueryRef": "Estado",
               "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas"
-                    }
-                  },
-                  "Property": "Faturamento YoY %"
-                }
-              },
-              "queryRef": "Medidas.Faturamento YoY %",
-              "nativeQueryRef": "Faturamento YoY %"
             }
           ]
         },
@@ -80,6 +62,24 @@
               "nativeQueryRef": "Faturamento Ano Anterior"
             }
           ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Faturamento YoY %"
+                }
+              },
+              "queryRef": "Medidas.Faturamento YoY %",
+              "nativeQueryRef": "Faturamento YoY %"
+            }
+          ]
         }
       },
       "sortDefinition": {
@@ -97,8 +97,7 @@
             },
             "direction": "Descending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
     "objects": {

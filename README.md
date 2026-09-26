@@ -21,7 +21,7 @@ desafios/
 
 | # | Desafio | Status |
 |---|---------|--------|
-| 010 | Vertex Tennis | Em construção (Visão Executiva pronta) |
+| 010 | Vertex Tennis | Concluído (3 páginas + documentação da solução) |
 
 Os dados brutos e os materiais de identidade fornecidos pelo curso não são publicados neste repositório.
 Para abrir um projeto, ajuste o parâmetro `caminhoDados` para a pasta local onde estão os dados do desafio.

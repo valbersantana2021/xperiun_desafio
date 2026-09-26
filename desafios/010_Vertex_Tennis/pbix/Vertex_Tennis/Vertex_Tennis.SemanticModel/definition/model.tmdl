@@ -20,3 +20,5 @@ ref table dSegmento
 ref table dCalendario
 ref table Medidas
 
+ref cultureInfo pt-BR
+

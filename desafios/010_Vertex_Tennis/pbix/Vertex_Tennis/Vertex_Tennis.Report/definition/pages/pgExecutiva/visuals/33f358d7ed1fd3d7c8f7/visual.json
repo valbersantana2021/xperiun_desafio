@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "33f358d7ed1fd3d7c8f7",
   "position": {
     "x": 32,
@@ -28,38 +28,6 @@
               "queryRef": "dCalendario.MesAbreviado",
               "nativeQueryRef": "MesAbreviado",
               "active": true
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas"
-                    }
-                  },
-                  "Property": "Faturamento"
-                }
-              },
-              "queryRef": "Medidas.Faturamento",
-              "nativeQueryRef": "Faturamento"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas"
-                    }
-                  },
-                  "Property": "Faturamento Ano Anterior"
-                }
-              },
-              "queryRef": "Medidas.Faturamento Ano Anterior",
-              "nativeQueryRef": "Faturamento Ano Anterior"
             }
           ]
         },
@@ -94,6 +62,38 @@
               "nativeQueryRef": "Faturamento YoY %"
             }
           ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Faturamento"
+                }
+              },
+              "queryRef": "Medidas.Faturamento",
+              "nativeQueryRef": "Faturamento"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Faturamento Ano Anterior"
+                }
+              },
+              "queryRef": "Medidas.Faturamento Ano Anterior",
+              "nativeQueryRef": "Faturamento Ano Anterior"
+            }
+          ]
         }
       },
       "sortDefinition": {
@@ -111,8 +111,7 @@
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": false
+        ]
       }
     },
     "objects": {
