@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "22819f222398e17672f8",
   "position": {
-    "x": 424,
+    "x": 447,
     "y": 213,
     "z": 8000,
     "height": 40,
-    "width": 76
+    "width": 52
   },
   "visual": {
     "visualType": "textbox",
@@ -27,7 +27,7 @@
                     }
                   }
                 ],
-                "horizontalTextAlignment": "Center"
+                "horizontalTextAlignment": "Left"
               }
             ]
           }
