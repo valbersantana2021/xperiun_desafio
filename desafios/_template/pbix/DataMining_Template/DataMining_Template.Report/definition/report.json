@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "customTheme": {
+      "name": "DataMining-Dark-7c3aed00.json",
+      "reportVersionAtImport": {
+        "visual": "2.11.0",
+        "report": "3.3.0",
+        "page": "2.1.0"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "DataMining-Dark-7c3aed00.json",
+          "path": "DataMining-Dark-7c3aed00.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "datamining-logo-horizontal-dark1790438380001.png",
+          "path": "datamining-logo-horizontal-dark1790438380001.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "defaultFilterActionIsDataFilter": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true
+  }
+}

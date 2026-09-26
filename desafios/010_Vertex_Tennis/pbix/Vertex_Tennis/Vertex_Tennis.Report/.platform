@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Vertex Tennis"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b506c0fb-3485-5bdf-9b0e-d61cdcc353b7"
+  }
+}

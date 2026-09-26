@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Vertex Tennis"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e56ec787-ac93-5ac9-9722-4bad61e4ef64"
+  }
+}

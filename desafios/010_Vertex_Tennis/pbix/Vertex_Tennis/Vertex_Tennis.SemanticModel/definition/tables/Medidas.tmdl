@@ -1,0 +1,152 @@
+table Medidas
+	lineageTag: 957f1836-d708-4266-8f6c-8d5625baa993
+
+	/// Soma de quantidade de itens vezes o preço unitário padrão da subcategoria.
+	measure Faturamento = SUMX ( fVendas, fVendas[QuantidadeItens] * RELATED ( dProduto[PrecoUnitario] ) )
+		formatString: R$ #,0
+		displayFolder: 01. Vendas
+		lineageTag: 6619838d-30a3-461d-9267-9d9d2a64004e
+
+	/// Soma de quantidade de itens vezes o custo unitário padrão da subcategoria.
+	measure Custo = SUMX ( fVendas, fVendas[QuantidadeItens] * RELATED ( dProduto[CustoUnitario] ) )
+		formatString: R$ #,0
+		displayFolder: 01. Vendas
+		lineageTag: d28f22ed-f1ae-4755-a6a9-e9ff9e664569
+
+	/// Unidades vendidas.
+	measure 'Quantidade de Itens' = SUM ( fVendas[QuantidadeItens] )
+		formatString: #,0
+		displayFolder: 02. Quantidade
+		lineageTag: c5e46c1c-4a6f-42ff-af32-cf79e185c8fe
+
+	/// Faturamento menos Custo.
+	measure 'Margem Bruta' = [Faturamento] - [Custo]
+		formatString: R$ #,0
+		displayFolder: 03. Margem
+		lineageTag: efd3a2a2-fda9-4cee-9949-cf2e16aecbe3
+
+	/// Margem bruta dividida pelo faturamento.
+	measure 'Margem Bruta %' = DIVIDE ( [Margem Bruta], [Faturamento] )
+		formatString: 0.0%
+		displayFolder: 03. Margem
+		lineageTag: 8eb3c71e-9008-449a-a30e-01f11e7d1606
+
+	/// Faturamento do mesmo período um ano antes. Vazio quando não existe ano anterior.
+	measure 'Faturamento Ano Anterior' = CALCULATE ( [Faturamento], DATEADD ( dCalendario[Data], -1, YEAR ) )
+		formatString: R$ #,0
+		displayFolder: 06. Tempo
+		lineageTag: 7e3bcba1-28e0-46f3-ad01-129b457d0895
+
+	/// Variação percentual do faturamento contra o mesmo período do ano anterior.
+	measure 'Faturamento YoY %' =
+			VAR __Atual = [Faturamento]
+			VAR __Anterior = [Faturamento Ano Anterior]
+			RETURN
+				IF ( NOT ISBLANK ( __Anterior ), DIVIDE ( __Atual - __Anterior, __Anterior ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 06. Tempo
+		lineageTag: a2032dd5-bfe6-4fc3-9db6-602bf0d47365
+
+	/// Quanto falta para igualar o faturamento do ano anterior. Negativo significa que já superou.
+	measure 'Faltante para Ano Anterior' =
+			VAR __Anterior = [Faturamento Ano Anterior]
+			RETURN
+				IF ( NOT ISBLANK ( __Anterior ), __Anterior - [Faturamento] )
+		formatString: R$ #,0;-R$ #,0;R$ #,0
+		displayFolder: 06. Tempo
+		lineageTag: 890aa430-d7fb-4847-99ec-a218f7a5fe3f
+
+	/// Margem bruta do mesmo período um ano antes.
+	measure 'Margem Bruta Ano Anterior' = CALCULATE ( [Margem Bruta], DATEADD ( dCalendario[Data], -1, YEAR ) )
+		formatString: R$ #,0
+		displayFolder: 06. Tempo
+		lineageTag: 250e8ce1-d59c-40d3-9a7d-e17eb23efc83
+
+	/// Variação percentual da margem bruta contra o ano anterior.
+	measure 'Margem Bruta YoY %' =
+			VAR __Atual = [Margem Bruta]
+			VAR __Anterior = [Margem Bruta Ano Anterior]
+			RETURN
+				IF ( NOT ISBLANK ( __Anterior ), DIVIDE ( __Atual - __Anterior, __Anterior ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 06. Tempo
+		lineageTag: 18e9c5b6-10c8-4afc-a690-00098bf93a6d
+
+	/// Itens vendidos no mesmo período um ano antes.
+	measure 'Quantidade de Itens Ano Anterior' = CALCULATE ( [Quantidade de Itens], DATEADD ( dCalendario[Data], -1, YEAR ) )
+		formatString: #,0
+		displayFolder: 06. Tempo
+		lineageTag: c84560d5-de77-4155-aee8-9c0143c313f6
+
+	/// Variação percentual de itens vendidos contra o ano anterior.
+	measure 'Quantidade de Itens YoY %' =
+			VAR __Atual = [Quantidade de Itens]
+			VAR __Anterior = [Quantidade de Itens Ano Anterior]
+			RETURN
+				IF ( NOT ISBLANK ( __Anterior ), DIVIDE ( __Atual - __Anterior, __Anterior ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 06. Tempo
+		lineageTag: 71579914-482e-4df8-b10b-8d2d532c4a01
+
+	/// Variação do faturamento apenas onde houve queda. Vazio nos demais casos. Usada para destacar quedas.
+	measure 'Faturamento YoY % Queda' =
+			VAR __Variacao = [Faturamento YoY %]
+			RETURN
+				IF ( __Variacao < 0, __Variacao )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 06. Tempo
+		lineageTag: 152e9373-da8e-4909-bcb3-c3a7ada59566
+
+	/// Faturamento do item dividido pelo faturamento total dos itens selecionados.
+	measure 'Participação %' = DIVIDE ( [Faturamento], CALCULATE ( [Faturamento], ALLSELECTED ( dProduto ) ) )
+		formatString: 0.0%
+		displayFolder: 07. Rankings
+		lineageTag: b057ab34-df02-4b65-b717-5f20beb94556
+
+	/// Soma da participação, da subcategoria de maior faturamento para a de menor. Empates são desfeitos pela ordem alfabética. Base da curva ABC.
+	measure 'Participação Acumulada %' =
+			VAR __Atual = [Faturamento]
+			VAR __Nome = SELECTEDVALUE ( dProduto[SubcategoriaCategoria] )
+			VAR __Itens =
+				ADDCOLUMNS (
+					ALLSELECTED ( dProduto[SubcategoriaCategoria] ),
+					"@Fat", [Faturamento]
+				)
+			VAR __Acumulado =
+				SUMX (
+					FILTER (
+						__Itens,
+						[@Fat] > __Atual
+							|| ( [@Fat] = __Atual && dProduto[SubcategoriaCategoria] <= __Nome )
+					),
+					[@Fat]
+				)
+			VAR __Total = CALCULATE ( [Faturamento], ALLSELECTED ( dProduto ) )
+			RETURN
+				IF (
+					HASONEVALUE ( dProduto[SubcategoriaCategoria] ) && NOT ISBLANK ( __Atual ),
+					DIVIDE ( __Acumulado, __Total )
+				)
+		formatString: 0.0%
+		displayFolder: 07. Rankings
+		lineageTag: cdf5a5ff-b348-408e-a873-dfe2bb7c757a
+
+	/// Ano mais recente no contexto de filtro.
+	measure 'Ano Referência' = MAX ( dCalendario[Ano] )
+		formatString: 0
+		displayFolder: 99. Técnicas
+		lineageTag: da496c67-36db-45f4-b58f-57352c173140
+
+	column Medidas
+		isHidden
+		lineageTag: dd134a73-2529-4613-a17e-042a8ff5954a
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Medidas]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = SELECTCOLUMNS ( { 1 }, "Medidas", ''[Value] )
+

@@ -1,0 +1,21 @@
+table dSegmento
+	lineageTag: 36f4c8a8-9006-479e-99e2-9ac5cdc2db2a
+
+	column Segmento
+		dataType: string
+		lineageTag: 7fc3b7f0-c0fe-44a1-8ebc-c939915eb53e
+		summarizeBy: none
+		sourceColumn: Segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dSegmento = m
+		mode: import
+		source =
+				let
+					Colunas = Table.SelectColumns ( stgVendas, {"Segmento"} ),
+					Unicos = Table.Distinct ( Colunas ),
+					Ordenado = Table.Sort ( Unicos, {{"Segmento", Order.Ascending}} )
+				in
+					Ordenado
+

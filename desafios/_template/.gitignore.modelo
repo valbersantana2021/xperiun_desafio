@@ -1,0 +1,4 @@
+db/
+*.csv
+*.xlsx
+*.pbix.bak

@@ -1,0 +1,93 @@
+table dProduto
+	lineageTag: b441eb6b-3c13-41de-be4a-8f6308479819
+
+	column IdSubcategoria
+		dataType: int64
+		isHidden
+		isKey
+		formatString: 0
+		lineageTag: 73756473-2ef8-491e-8d11-198eb3f616ad
+		summarizeBy: none
+		sourceColumn: IdSubcategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column IdCategoria
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c445e693-1001-4743-b0f4-4ee1f097feee
+		summarizeBy: none
+		sourceColumn: IdCategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 3babe140-5f82-424e-8217-53664f3c2629
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcategoria
+		dataType: string
+		lineageTag: 8c10f340-48a6-4d72-94fe-75897a58754b
+		summarizeBy: none
+		sourceColumn: Subcategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubcategoriaCategoria
+		dataType: string
+		lineageTag: 04ef577e-3f0c-4093-93cc-651b91a885a3
+		summarizeBy: none
+		sourceColumn: SubcategoriaCategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descricao
+		dataType: string
+		lineageTag: 16aa80a8-05bd-4274-b72c-d9fa618de318
+		summarizeBy: none
+		sourceColumn: Descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustoUnitario
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: ef69a3ff-1b65-434d-bdf2-4bf7b0ec5d31
+		summarizeBy: none
+		sourceColumn: CustoUnitario
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrecoUnitario
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 4df6b503-0b42-4c58-aaae-6645edd48101
+		summarizeBy: none
+		sourceColumn: PrecoUnitario
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dProduto = m
+		mode: import
+		source =
+				let
+					Fonte = Excel.Workbook ( File.Contents ( caminhoDados & "Base Dados - Missão Zero.xlsx" ), true, true ),
+					AbaSub = Fonte{[Item = "SubcategoriaProduto", Kind = "Sheet"]}[Data],
+					AbaCat = Fonte{[Item = "CategoriaProduto", Kind = "Sheet"]}[Data],
+					TiposSub = Table.TransformColumnTypes ( AbaSub, {{"IDSubcategoriaProduto", Int64.Type}, {"IDCategoriaProduto", Int64.Type}, {"SubcategoriaNome", type text}, {"SubcategoriaDescricao", type text}, {"CustoUnitPadrao", Int64.Type}, {"PrecoUnitPadrao", Int64.Type}} ),
+					TiposCat = Table.TransformColumnTypes ( AbaCat, {{"IDCategoriaProduto", Int64.Type}, {"CategoriaNome", type text}} ),
+					Juncao = Table.NestedJoin ( TiposSub, {"IDCategoriaProduto"}, TiposCat, {"IDCategoriaProduto"}, "Cat", JoinKind.LeftOuter ),
+					Expandido = Table.ExpandTableColumn ( Juncao, "Cat", {"CategoriaNome"} ),
+					Renomeado = Table.RenameColumns ( Expandido, {{"IDSubcategoriaProduto", "IdSubcategoria"}, {"IDCategoriaProduto", "IdCategoria"}, {"SubcategoriaNome", "Subcategoria"}, {"CategoriaNome", "Categoria"}, {"SubcategoriaDescricao", "Descricao"}, {"CustoUnitPadrao", "CustoUnitario"}, {"PrecoUnitPadrao", "PrecoUnitario"}} ),
+					Rotulo = Table.AddColumn ( Renomeado, "SubcategoriaCategoria", each [Subcategoria] & " (" & [Categoria] & ")", type text ),
+					Final = Table.SelectColumns ( Rotulo, {"IdSubcategoria", "IdCategoria", "Categoria", "Subcategoria", "SubcategoriaCategoria", "Descricao", "CustoUnitario", "PrecoUnitario"} )
+				in
+					Final
+

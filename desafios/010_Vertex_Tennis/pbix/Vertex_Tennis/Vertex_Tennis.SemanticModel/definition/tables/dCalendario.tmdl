@@ -1,0 +1,103 @@
+table dCalendario
+	lineageTag: 722ab6be-d4da-4076-9119-2b522948f3f9
+	dataCategory: Time
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: b12b0752-6997-4bce-9150-5076081e7327
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: af7daa29-2deb-45d3-9329-4ff705ccf402
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesNome
+		dataType: string
+		lineageTag: 89e24765-bdfe-4911-9e90-eb3428dcdc58
+		summarizeBy: none
+		sourceColumn: MesNome
+		sortByColumn: MesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesAbreviado
+		dataType: string
+		lineageTag: 24324945-d75d-4f77-a845-c627c9236d59
+		summarizeBy: none
+		sourceColumn: MesAbreviado
+		sortByColumn: MesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column MesNumero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4ffb5af3-3798-48aa-ab89-0877f40ff4d9
+		summarizeBy: none
+		sourceColumn: MesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		dataType: string
+		lineageTag: 28a7cbb1-8dba-4ca8-bae0-674b75382743
+		summarizeBy: none
+		sourceColumn: AnoMes
+		sortByColumn: AnoMesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMesNumero
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6f412dcf-fe40-4825-97cb-164cd330a064
+		summarizeBy: none
+		sourceColumn: AnoMesNumero
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: string
+		lineageTag: 9bfe5364-e628-408a-907f-cfe3b301d0fd
+		summarizeBy: none
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCalendario = m
+		mode: import
+		source =
+				let
+					MenorData = List.Min ( fVendas[Data] ),
+					MaiorData = List.Max ( fVendas[Data] ),
+					DataInicio = Date.StartOfYear ( MenorData ),
+					DataFim = Date.EndOfYear ( MaiorData ),
+					Dias = Duration.Days ( DataFim - DataInicio ) + 1,
+					Datas = List.Dates ( DataInicio, Dias, #duration ( 1, 0, 0, 0 ) ),
+					Tabela = Table.FromList ( Datas, Splitter.SplitByNothing (), {"Data"}, null, ExtraValues.Error ),
+					Tipada = Table.TransformColumnTypes ( Tabela, {{"Data", type date}} ),
+					Ano = Table.AddColumn ( Tipada, "Ano", each Date.Year ( [Data] ), Int64.Type ),
+					MesNumero = Table.AddColumn ( Ano, "MesNumero", each Date.Month ( [Data] ), Int64.Type ),
+					MesNome = Table.AddColumn ( MesNumero, "MesNome", each Text.Proper ( Date.MonthName ( [Data], "pt-BR" ) ), type text ),
+					MesAbreviado = Table.AddColumn ( MesNome, "MesAbreviado", each Text.Proper ( Text.Start ( Date.MonthName ( [Data], "pt-BR" ), 3 ) ), type text ),
+					AnoMes = Table.AddColumn ( MesAbreviado, "AnoMes", each [MesAbreviado] & "-" & Text.End ( Text.From ( [Ano] ), 2 ), type text ),
+					AnoMesNumero = Table.AddColumn ( AnoMes, "AnoMesNumero", each [Ano] * 100 + [MesNumero], Int64.Type ),
+					Trimestre = Table.AddColumn ( AnoMesNumero, "Trimestre", each "T" & Text.From ( Date.QuarterOfYear ( [Data] ) ), type text ),
+					Final = Table.SelectColumns ( Trimestre, {"Data", "Ano", "MesNumero", "MesNome", "MesAbreviado", "AnoMes", "AnoMesNumero", "Trimestre"} )
+				in
+					Final
+

@@ -1,0 +1,60 @@
+table fVendas
+	lineageTag: d80c76a5-67be-4729-bd9b-54583bc350a0
+
+	column Data
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 4224a248-4579-43e1-a0fc-210321c3d74b
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Segmento
+		dataType: string
+		lineageTag: da369780-d47c-4b8f-8ff3-47feacb9c6a5
+		summarizeBy: none
+		sourceColumn: Segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Estado
+		dataType: string
+		lineageTag: a137f7f1-a755-4fb8-80d9-670d8b799851
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column IdSubcategoria
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d97c0cf4-ad31-49a0-9890-b397a6b87762
+		summarizeBy: none
+		sourceColumn: IdSubcategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuantidadeItens
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: f57d52c6-b830-4a31-b5d9-22ad4b0679a8
+		summarizeBy: none
+		sourceColumn: QuantidadeItens
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fVendas = m
+		mode: import
+		source =
+				let
+					Colunas = Table.SelectColumns ( stgVendas, {"Data", "Segmento", "Estado", "IDSubcategoriaProduto", "QuantidadeItens"} ),
+					Renomeado = Table.RenameColumns ( Colunas, {{"IDSubcategoriaProduto", "IdSubcategoria"}} )
+				in
+					Renomeado
+

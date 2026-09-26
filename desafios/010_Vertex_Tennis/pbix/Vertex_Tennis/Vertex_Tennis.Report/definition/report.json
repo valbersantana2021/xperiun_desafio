@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "customTheme": {
+      "name": "Vertex-1e0a5c10.json",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "bg-exec1790438380001.png",
+          "path": "bg-exec1790438380001.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg-produtos1790438380003.png",
+          "path": "bg-produtos1790438380003.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg-regional1790438380002.png",
+          "path": "bg-regional1790438380002.png",
+          "type": "Image"
+        },
+        {
+          "name": "Vertex-1e0a5c10.json",
+          "path": "Vertex-1e0a5c10.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "defaultFilterActionIsDataFilter": true,
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true
+  }
+}

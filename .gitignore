@@ -1,0 +1,23 @@
+# Power BI local/cache
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+**/.pbi/unappliedChanges.json
+*.pbix
+**/_pacote/
+**/_removidos/
+*.zip
+
+# Materiais de terceiros / dados brutos dos desafios (nao publicar)
+desafios/*/db/*
+!desafios/*/db/.gitkeep
+desafios/010_Vertex_Tennis/assets/*
+!desafios/010_Vertex_Tennis/assets/tema-vertex.json
+desafios/_template/assets/_extraido_pdf/
+desafios/_template/assets/*.pdf
+
+# Interno
+/skill/
+/doc/
+~$*
+Thumbs.db
+desafios/_template/assets/datamining-logo-match.svg

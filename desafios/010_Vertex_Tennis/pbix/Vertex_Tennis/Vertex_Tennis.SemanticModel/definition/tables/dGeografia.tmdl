@@ -1,0 +1,29 @@
+table dGeografia
+	lineageTag: 2090f928-3414-4ee8-91ad-8a20917a316b
+
+	column Estado
+		dataType: string
+		lineageTag: e9994cb2-4dfd-41f1-8e87-1e13a30fb35a
+		summarizeBy: none
+		sourceColumn: Estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Regiao
+		dataType: string
+		lineageTag: b7d75431-ab48-416b-980f-cb4ae67af217
+		summarizeBy: none
+		sourceColumn: Regiao
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dGeografia = m
+		mode: import
+		source =
+				let
+					Colunas = Table.SelectColumns ( stgVendas, {"Estado", "Regiao"} ),
+					Unicos = Table.Distinct ( Colunas ),
+					Ordenado = Table.Sort ( Unicos, {{"Regiao", Order.Ascending}, {"Estado", Order.Ascending}} )
+				in
+					Ordenado
+

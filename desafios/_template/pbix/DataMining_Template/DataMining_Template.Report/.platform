@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "DataMining Template"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fcf1095a-19bb-58b5-8abc-d331b93020d1"
+  }
+}

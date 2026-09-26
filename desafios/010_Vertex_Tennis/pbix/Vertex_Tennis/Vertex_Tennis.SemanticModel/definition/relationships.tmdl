@@ -1,0 +1,16 @@
+relationship e1b1a160-b2ed-509c-9f08-a143ffaa3b86
+	fromColumn: fVendas.IdSubcategoria
+	toColumn: dProduto.IdSubcategoria
+
+relationship 4bdee31d-610a-5992-a10d-17c0d0848250
+	fromColumn: fVendas.Estado
+	toColumn: dGeografia.Estado
+
+relationship 38e61a45-ca6a-5799-a22d-7cc8172a6fd2
+	fromColumn: fVendas.Segmento
+	toColumn: dSegmento.Segmento
+
+relationship 02607d17-ef99-5faa-aad8-39c279d83a7b
+	fromColumn: fVendas.Data
+	toColumn: dCalendario.Data
+

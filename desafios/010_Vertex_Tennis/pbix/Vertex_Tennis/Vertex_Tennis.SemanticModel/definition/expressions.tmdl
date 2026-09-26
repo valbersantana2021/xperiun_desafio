@@ -1,0 +1,19 @@
+expression caminhoDados = "D:\Consultoria\xperiun\desafios\010_Vertex_Tennis\db\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 8d6b0634-0abe-4489-8eef-9fe780bd6ad1
+
+	annotation PBI_ResultType = Text
+
+expression stgVendas =
+		let
+			Fonte = Excel.Workbook ( File.Contents ( caminhoDados & "Base Dados - Missão Zero.xlsx" ), true, true ),
+			Aba = Fonte{[Item = "Vendas", Kind = "Sheet"]}[Data],
+			Tipos = Table.TransformColumnTypes ( Aba, {{"Mes", type text}, {"Ano", Int64.Type}, {"Segmento", type text}, {"Estado", type text}, {"Regiao", type text}, {"IDSubcategoriaProduto", Int64.Type}, {"QuantidadeItens", Int64.Type}} ),
+			Meses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"},
+			MesNumero = Table.AddColumn ( Tipos, "MesNumero", each List.PositionOf ( Meses, [Mes] ) + 1, Int64.Type ),
+			Data = Table.AddColumn ( MesNumero, "Data", each #date ( [Ano], [MesNumero], 1 ), type date )
+		in
+			Data
+	lineageTag: b5cfe854-c996-4746-aa6c-6e840454a036
+
+	annotation PBI_ResultType = Table
+
